@@ -14,14 +14,18 @@
 ## Install
 
 ```
-docker pull prantlf/node-git-chromium-java
-# or
 docker pull prantlf/node-git-chromium-java:lts-alpine-java8
 # or
 docker pull prantlf/node-git-chromium-java:lts-alpine-openjdk
 ```
 
 ## Use
+
+```
+docker run --rm -it -v "$(pwd)":/app -w /app \
+  prantlf/node-git-chromium-java:lts-alpine-openjdk \
+  sh -c 'npm ci && npm test'
+```
 
 See [how to use the base node image] for more information.
 

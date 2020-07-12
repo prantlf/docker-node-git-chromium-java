@@ -10,11 +10,11 @@ lint ::
 build :: build8 build11
 
 build8 ::
-	docker build --no-cache --build-arg JAVER=8 -t node-git-chromium-java .
+	docker build --no-cache -t node-git-chromium-java -f Dockerfile.8 .
 	docker tag node-git-chromium-java prantlf/node-git-chromium-java:lts-alpine-java8
 
 build11 ::
-	docker build --no-cache --build-arg JAVER=8 -t node-git-chromium-java .
+	docker build --no-cache -t node-git-chromium-java -f Dockerfile.11 .
 	docker tag node-git-chromium-java prantlf/node-git-chromium-java:lts-alpine-openjdk
 
 run ::

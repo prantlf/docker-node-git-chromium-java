@@ -1,0 +1,29 @@
+image: docker:stable
+services:
+  - docker:dind
+
+variables:
+  GITLAB_TAG: $CI_REGISTRY_IMAGE
+  HUB_TAG: prantlf/node-git-chromium-java
+
+build:
+  script:
+    - |
+      docker run --rm -i \
+        -v "${PWD}"/.hadolint.yaml:/.config/hadolint.yaml \
+        hadolint/hadolint < Dockerfile
+    - docker build -t $GITLAB_TAG -f Dockerfile.8 .
+    - docker tag $GITLAB_TAG $GITLAB_TAG:lts-alpine-java8
+    - docker tag $GITLAB_TAG $HUB_TAG:lts-alpine-java8
+    - docker build -t $GITLAB_TAG -f Dockerfile.11 .
+    - docker tag $GITLAB_TAG $GITLAB_TAG:lts-alpine-openjdk
+    - docker tag $GITLAB_TAG $HUB_TAG:lts-alpine-openjdk
+    - echo -n "$CI_REGISTRY_PASSWORD" | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+    - docker push $GITLAB_TAG:lts-alpine-java8
+    - docker push $GITLAB_TAG:lts-alpine-openjdk
+    - |
+      mkdir -p $HOME/.docker
+      echo '{ "auths": { "'https://index.docker.io/v1/'": { "auth": "'$DOCKER_AUTH'", "email": "prantlf@gmail.com" } } }' \
+        > $HOME/.docker/config.json
+    - docker push $HUB_TAG:lts-alpine-java8
+    - docker push $HUB_TAG:lts-alpine-openjdk

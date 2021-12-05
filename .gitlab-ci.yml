@@ -11,7 +11,10 @@ build:
     - |
       docker run --rm -i \
         -v "${PWD}"/.hadolint.yaml:/.config/hadolint.yaml \
-        hadolint/hadolint < Dockerfile
+        hadolint/hadolint < Dockerfile.8
+      docker run --rm -i \
+        -v "${PWD}"/.hadolint.yaml:/.config/hadolint.yaml \
+        hadolint/hadolint < Dockerfile.11
     - docker build -t $GITLAB_TAG -f Dockerfile.8 .
     - docker tag $GITLAB_TAG $GITLAB_TAG:lts-alpine-java8
     - docker tag $GITLAB_TAG $HUB_TAG:lts-alpine-java8
